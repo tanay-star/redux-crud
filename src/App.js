@@ -55,10 +55,9 @@ class App extends React.Component {
     })
   }
 
-  deleteEmployee = (id) => {
+  deleteButtonClick = () => {
     this.clearData()
     this.setState({ modalShow: true })
-    this.props.deleteEmployee(id)
   }
 
   setConfirmOpen = (value) => {
@@ -154,7 +153,7 @@ class App extends React.Component {
                           <button onClick={() => this.editDetails(data)}>
                             EDIT
                           </button>{' '}
-                          <button onClick={() => this.deleteEmployee(data.id)}>
+                          <button onClick={() => this.deleteButtonClick()}>
                             DELETE
                           </button>{' '}
                         </td>
