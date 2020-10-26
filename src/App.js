@@ -57,6 +57,7 @@ class App extends React.Component {
 
   deleteEmployee = (id) => {
     this.clearData()
+    this.setState({ modalShow: true })
     this.props.deleteEmployee(id)
   }
 
@@ -97,7 +98,9 @@ class App extends React.Component {
   }
 
   render() {
-    let modalClose = () => this.setState({ modalShow: false })
+    let modalClose = () => {
+      this.setState({ modalShow: false })
+    }
     return (
       <div className="App">
         <header className="App-header">
@@ -151,9 +154,7 @@ class App extends React.Component {
                           <button onClick={() => this.editDetails(data)}>
                             EDIT
                           </button>{' '}
-                          <button
-                            onClick={() => this.setState({ modalShow: true })}
-                          >
+                          <button onClick={() => this.deleteEmployee(data.id)}>
                             DELETE
                           </button>{' '}
                         </td>

@@ -15,7 +15,9 @@ const DialogBox = (props) => {
           <h4>Delete the post ? </h4>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.onHide}>Close</Button>
+          <Button variant="danger" onClick={props.onHide}>
+            Delete
+          </Button>
         </Modal.Footer>
       </Modal>
     </div>
