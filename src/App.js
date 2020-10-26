@@ -1,6 +1,8 @@
 import React from 'react'
 import logo from './logo.svg'
 import './App.css'
+//importing components
+import DialogBox from './dialogbox'
 //connecting to redux
 import { connect } from 'react-redux'
 //importing actions
@@ -18,6 +20,7 @@ class App extends React.Component {
       id: 0,
       employeeName: '',
       employeeDepartment: '',
+      modalShow: false,
     }
   }
   componentDidMount() {
@@ -54,9 +57,11 @@ class App extends React.Component {
 
   deleteEmployee = (id) => {
     this.clearData()
-    if (window.confirm('Are you sure?')) {
-      this.props.deleteEmployee(id)
-    }
+    this.props.deleteEmployee(id)
+  }
+
+  setConfirmOpen = (value) => {
+    this.setState({ open: value })
   }
 
   submitData = () => {
@@ -92,6 +97,7 @@ class App extends React.Component {
   }
 
   render() {
+    let modalClose = () => this.setState({ modalShow: false })
     return (
       <div className="App">
         <header className="App-header">
@@ -145,7 +151,9 @@ class App extends React.Component {
                           <button onClick={() => this.editDetails(data)}>
                             EDIT
                           </button>{' '}
-                          <button onClick={() => this.deleteEmployee(data.id)}>
+                          <button
+                            onClick={() => this.setState({ modalShow: true })}
+                          >
                             DELETE
                           </button>{' '}
                         </td>
@@ -154,6 +162,7 @@ class App extends React.Component {
                   })}
               </tbody>
             </table>
+            <DialogBox show={this.state.modalShow} onHide={modalClose} />
           </div>
         </p>
       </div>
