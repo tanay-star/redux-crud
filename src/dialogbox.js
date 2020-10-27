@@ -1,5 +1,9 @@
 import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
+//connecting to store
+import { connect } from 'react-redux'
+//importing actions
+import { deleteEmployee } from './redux/action'
 
 const DialogBox = (props) => {
   return (
@@ -15,7 +19,16 @@ const DialogBox = (props) => {
           <h4>Delete the post ? </h4>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={props.onHide}>
+          <Button variant="primary" onClick={props.onHide}>
+            No
+          </Button>
+          <Button
+            variant="danger"
+            onClick={() => {
+              props.deleteEmployee(props.id)
+              props.onHide()
+            }}
+          >
             Delete
           </Button>
         </Modal.Footer>
@@ -24,4 +37,10 @@ const DialogBox = (props) => {
   )
 }
 
-export default DialogBox
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deleteEmployee: (data) => dispatch(deleteEmployee(data)),
+  }
+}
+
+export default connect(null, mapDispatchToProps)(DialogBox)

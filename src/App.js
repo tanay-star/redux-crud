@@ -157,12 +157,18 @@ class App extends React.Component {
                             DELETE
                           </button>{' '}
                         </td>
+                        <td>
+                          <DialogBox
+                            show={this.state.modalShow}
+                            onHide={modalClose}
+                            id={data.id}
+                          />
+                        </td>
                       </tr>
                     )
                   })}
               </tbody>
             </table>
-            <DialogBox show={this.state.modalShow} onHide={modalClose} />
           </div>
         </p>
       </div>
@@ -181,7 +187,7 @@ const mapDispatchToProps = (dispatch) => {
     getEmployee: () => dispatch(getEmployee()),
     addEmployee: (data) => dispatch(addEmployee(data)),
     editEmployee: (data) => dispatch(editEmployee(data)),
-    deleteEmployee: (data) => dispatch(deleteEmployee(data)),
+    // deleteEmployee: (data) => dispatch(deleteEmployee(data)),
   }
 }
 
