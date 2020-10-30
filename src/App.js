@@ -22,11 +22,31 @@ class App extends Component {
       employeeDepartment: '',
       modalShow: false,
       empId: 0,
+      employeeNameError: '',
+      employeeDepartmentError: '',
     }
   }
 
   componentDidMount() {
     this.props.getEmployee()
+  }
+
+  validate = () => {
+    let employeeNameError = ''
+    let employeeDepartmentError = ''
+
+    if (this.state.employeeName === '') {
+      employeeNameError = 'Name is required'
+    }
+    if (this.state.employeeDepartment === '') {
+      employeeDepartmentError = 'Department is required'
+    }
+    if (employeeNameError) {
+      this.setState({ employeeNameError: employeeNameError })
+    }
+    if (employeeDepartmentError) {
+      this.setState({ employeeDepartmentError: employeeDepartmentError })
+    }
   }
 
   submitData = () => {
@@ -40,8 +60,8 @@ class App extends Component {
         employeeName: this.state.employeeName,
         employeeDepartment: this.state.employeeDepartment,
       }
-
       this.props.addEmployee(newEmployee)
+      this.clearData()
     } else if (
       this.state.employeeName &&
       this.state.employeeDepartment &&
@@ -54,11 +74,12 @@ class App extends Component {
       }
 
       this.props.editEmployee(updatedDetails)
+      this.clearData()
     } else {
-      alert('Enter Employee Details.')
+      this.validate()
     }
 
-    this.clearData()
+    // this.clearData()
   }
 
   editDetails = (data) => {
@@ -93,6 +114,8 @@ class App extends Component {
       id: 0,
       employeeName: '',
       employeeDepartment: '',
+      employeeNameError: '',
+      employeeDepartmentError: '',
     })
   }
 
@@ -105,7 +128,7 @@ class App extends Component {
     let modalClose = () => {
       this.setState({ modalShow: false })
     }
-    let value
+
     return (
       <div className="App">
         <header className="App-header">
@@ -121,6 +144,9 @@ class App extends Component {
               type="text"
               placeholder="Employee Name"
             />{' '}
+            <div style={{ color: 'red', fontSize: 12 }}>
+              {this.state.employeeNameError}
+            </div>
             <br />
             Employee Department :{' '}
             <input
@@ -129,6 +155,9 @@ class App extends Component {
               type="text"
               placeholder="Employee Department"
             />
+            <div style={{ color: 'red', fontSize: 12 }}>
+              {this.state.employeeDepartmentError}
+            </div>
             <br />
             {this.state.id ? (
               <button onClick={this.submitData}>UPDATE</button>
@@ -151,7 +180,7 @@ class App extends Component {
                 {this.props.employees &&
                   this.props.employees.map((data, index) => {
                     console.log(data)
-                    value = data
+
                     return (
                       <tr key={index + 1}>
                         <td>{index + 1}</td>
