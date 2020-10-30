@@ -1,19 +1,19 @@
-import React from 'react'
+import React, { Component } from 'react'
 import logo from './logo.svg'
 import './App.css'
-//importing components
-import DialogBox from './dialogbox'
-//connecting to redux
-import { connect } from 'react-redux'
 //importing actions
 import {
-  addEmployee,
   getEmployee,
-  deleteEmployee,
+  addEmployee,
   editEmployee,
+  deleteEmployee,
 } from './redux/action'
+//connecting to redux store
+import { connect } from 'react-redux'
+//importing components
+import DialogBox from './dialogbox'
 
-class App extends React.Component {
+class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -21,47 +21,12 @@ class App extends React.Component {
       employeeName: '',
       employeeDepartment: '',
       modalShow: false,
+      empId: 0,
     }
   }
+
   componentDidMount() {
     this.props.getEmployee()
-  }
-
-  clearData = () => {
-    this.setState({
-      id: 0,
-      employeeName: '',
-      employeeDepartment: '',
-    })
-  }
-
-  handleNameChange = (e) => {
-    this.setState({
-      employeeName: e.target.value,
-    })
-  }
-
-  handleDepartmentChange = (e) => {
-    this.setState({
-      employeeDepartment: e.target.value,
-    })
-  }
-
-  editDetails = (data) => {
-    this.setState({
-      id: data.id,
-      employeeName: data.employeeName,
-      employeeDepartment: data.employeeDepartment,
-    })
-  }
-
-  deleteButtonClick = () => {
-    this.clearData()
-    this.setState({ modalShow: true })
-  }
-
-  setConfirmOpen = (value) => {
-    this.setState({ open: value })
   }
 
   submitData = () => {
@@ -96,10 +61,51 @@ class App extends React.Component {
     this.clearData()
   }
 
+  editDetails = (data) => {
+    this.setState({
+      id: data.id,
+      employeeName: data.employeeName,
+      employeeDepartment: data.employeeDepartment,
+    })
+  }
+
+  deleteEmployee = (id) => {
+    this.clearData()
+    if (window.confirm('Are you sure?')) {
+      this.props.deleteEmployee(id)
+    }
+  }
+
+  handleNameChange = (e) => {
+    this.setState({
+      employeeName: e.target.value,
+    })
+  }
+
+  handleDepartmentChange = (e) => {
+    this.setState({
+      employeeDepartment: e.target.value,
+    })
+  }
+
+  clearData = () => {
+    this.setState({
+      id: 0,
+      employeeName: '',
+      employeeDepartment: '',
+    })
+  }
+
+  deleteButtonClick = (id) => {
+    this.setState({ modalShow: true })
+    this.setState({ empId: id })
+  }
+
   render() {
     let modalClose = () => {
       this.setState({ modalShow: false })
     }
+    let value
     return (
       <div className="App">
         <header className="App-header">
@@ -144,6 +150,8 @@ class App extends React.Component {
               <tbody>
                 {this.props.employees &&
                   this.props.employees.map((data, index) => {
+                    console.log(data)
+                    value = data
                     return (
                       <tr key={index + 1}>
                         <td>{index + 1}</td>
@@ -153,22 +161,22 @@ class App extends React.Component {
                           <button onClick={() => this.editDetails(data)}>
                             EDIT
                           </button>{' '}
-                          <button onClick={() => this.deleteButtonClick()}>
+                          <button
+                            onClick={() => this.deleteButtonClick(data.id)}
+                          >
                             DELETE
                           </button>{' '}
-                        </td>
-                        <td>
-                          <DialogBox
-                            show={this.state.modalShow}
-                            onHide={modalClose}
-                            id={data.id}
-                          />
                         </td>
                       </tr>
                     )
                   })}
               </tbody>
             </table>
+            <DialogBox
+              show={this.state.modalShow}
+              onHide={modalClose}
+              id={this.state.empId}
+            />
           </div>
         </p>
       </div>
@@ -176,19 +184,13 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    employees: state.employees,
-  }
-}
+const mapStateToProps = (state) => ({
+  employees: state.employees,
+})
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getEmployee: () => dispatch(getEmployee()),
-    addEmployee: (data) => dispatch(addEmployee(data)),
-    editEmployee: (data) => dispatch(editEmployee(data)),
-    // deleteEmployee: (data) => dispatch(deleteEmployee(data)),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, {
+  getEmployee,
+  addEmployee,
+  editEmployee,
+  deleteEmployee,
+})(App)

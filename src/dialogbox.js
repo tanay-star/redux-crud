@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { deleteEmployee } from './redux/action'
 
 const DialogBox = (props) => {
+  console.log(props)
   return (
     <div>
       <Modal
@@ -25,7 +26,7 @@ const DialogBox = (props) => {
           <Button
             variant="danger"
             onClick={() => {
-              props.deleteEmployee(props.id)
+              props.deleteemployee(props.id)
               props.onHide()
             }}
           >
@@ -39,7 +40,7 @@ const DialogBox = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteEmployee: (data) => dispatch(deleteEmployee(data)),
+    deleteemployee: (data) => dispatch(deleteEmployee(data)),
   }
 }
 
